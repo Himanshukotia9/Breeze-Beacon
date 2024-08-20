@@ -1,13 +1,12 @@
 // Geolocation.jsx
 import React, { useEffect } from "react";
 import { useGeolocated } from "react-geolocated";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setLocation } from "../app/counter/slice";
 import Weather from "./Weather";
 
 const Geolocation = () => {
     const dispatch = useDispatch();
-    const location = useSelector((state) => state.location.items);
     const { coords, isGeolocationAvailable, isGeolocationEnabled } =
         useGeolocated({
             positionOptions: {

@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
 import Clock from "react-live-clock";
 import dateBuilder from "../dateBuilder";
-import ReactAnimatedWeather from "react-animated-weather";
 import { RseWind } from "react-skycons-extended";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetWeatherByCoordinatesQuery, useGetWeatherByNameQuery } from "../app/services/api";
 import { setCityItems, setWeather } from "../app/counter/slice";
+import getWeatherIcon from "../weatherIcon";
+import { getIconColor } from "../weatherIcon";
+import { ReactSkycon } from "react-skycons-extended";
 
 export default function CurrentWeather() {
   const dispatch = useDispatch();
@@ -26,9 +28,12 @@ export default function CurrentWeather() {
           country: data.sys.country,
           temp: Math.round(data.main.temp),
           humidity: data.main.humidity,
+          main: data.weather[0].main,
+          description: data.weather[0].description
         })); // Store weather data in Redux
     }
   }, [data, dispatch]);
+  console.log(data);
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -37,11 +42,13 @@ export default function CurrentWeather() {
   };
 
   const defaults = {
-    icon: "CLEAR_DAY",
-    color: "goldenrod",
     size: 64,
     animate: true,
   };
+
+  const isDaytime = (new Date().getHours() >= 6 && new Date().getHours() < 18);
+  const weatherIcon = getWeatherIcon(weather.main, weather.description, isDaytime); 
+  const iconColor = getIconColor(weatherIcon);
 
   return (
     <div className="flex justify-center items-center min-h-screen">
@@ -68,9 +75,9 @@ export default function CurrentWeather() {
           {error && <p>Error fetching weather data</p>}
         </div>
         <div className="py-4">
-          <ReactAnimatedWeather
-            icon={defaults.icon}
-            color={defaults.color}
+          <ReactSkycon
+            icon={weatherIcon}
+            color={iconColor}
             size={defaults.size}
             animate={defaults.animate}
           />
