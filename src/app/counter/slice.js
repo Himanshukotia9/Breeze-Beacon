@@ -1,3 +1,4 @@
+// slice.js
 import { createSlice } from '@reduxjs/toolkit'
 
 // Initial state for the news items
@@ -5,8 +6,8 @@ const initialState = {
     items: [],
   };
   
-  // City slice
-  export const citySlice = createSlice({
+// City slice
+export const citySlice = createSlice({
     name: 'city',
     initialState: initialState,
     reducers: {
@@ -14,26 +15,41 @@ const initialState = {
         state.items = action.payload;
       },
     },
-  });
+});
   
-  // Action creators for news slice
-  export const { setCityItems } = citySlice.actions;
+// Action creators for City slice
+export const { setCityItems } = citySlice.actions;
 
-    // City slice
-    export const weatherSlice = createSlice({
-        name: 'weather',
-        initialState: initialState,
-        reducers: {
-          setWeather: (state, action) => {
-            state.items = action.payload;
-          },
+// Weather slice
+export const weatherSlice = createSlice({
+    name: 'weather',
+    initialState: initialState,
+    reducers: {
+        setWeather: (state, action) => {
+        state.items = action.payload;
         },
-    });
+    },
+});
   
-  // Action creators for news slice
-  export const { setWeather } = weatherSlice.actions;
-  // Combine all slices into a single reducer object
+// Action creators for Weather slice
+export const { setWeather } = weatherSlice.actions;
+
+// Weather slice
+export const locationSlice = createSlice({
+    name: 'location',
+    initialState: initialState,
+    reducers: {
+        setLocation: (state, action) => {
+        state.items = action.payload;
+        },
+    },
+});
+  
+// Action creators for Weather slice
+export const { setLocation } = locationSlice.actions;
+// Combine all slices into a single reducer object
 export const rootReducer = {
     city: citySlice.reducer,
     weather: weatherSlice.reducer,
+    location: locationSlice.reducer,
   };

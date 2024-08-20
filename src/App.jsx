@@ -8,7 +8,6 @@ export default function App() {
   return (
     <>
       <div>
-        {/* <Weather/> */}
         <Geolocation/>
       </div>
     </>

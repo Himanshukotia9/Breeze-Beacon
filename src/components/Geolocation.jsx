@@ -1,7 +1,13 @@
-import React from "react";
+// Geolocation.jsx
+import React, { useEffect } from "react";
 import { useGeolocated } from "react-geolocated";
+import { useDispatch, useSelector } from 'react-redux';
+import { setLocation } from "../app/counter/slice";
+import Weather from "./Weather";
 
 const Geolocation = () => {
+    const dispatch = useDispatch();
+    const location = useSelector((state) => state.location.items);
     const { coords, isGeolocationAvailable, isGeolocationEnabled } =
         useGeolocated({
             positionOptions: {
@@ -9,36 +15,24 @@ const Geolocation = () => {
             },
             userDecisionTimeout: 5000,
         });
+
+
+        // Dispatch the location data to Redux when coords are available
+        useEffect(() => {
+            if (coords) {
+                dispatch(setLocation({
+                    lat: coords.latitude, 
+                    lon: coords.longitude 
+                }));
+            }
+        }, [coords, dispatch]);
         console.log(coords);
     return !isGeolocationAvailable ? (
         <div>Your browser does not support Geolocation</div>
     ) : !isGeolocationEnabled ? (
         <div>Geolocation is not enabled</div>
     ) : coords ? (
-        <table>
-            <tbody>
-                <tr>
-                    <td>latitude</td>
-                    <td>{coords.latitude}</td>
-                </tr>
-                <tr>
-                    <td>longitude</td>
-                    <td>{coords.longitude}</td>
-                </tr>
-                <tr>
-                    <td>altitude</td>
-                    <td>{coords.altitude}</td>
-                </tr>
-                <tr>
-                    <td>heading</td>
-                    <td>{coords.heading}</td>
-                </tr>
-                <tr>
-                    <td>speed</td>
-                    <td>{coords.speed}</td>
-                </tr>
-            </tbody>
-        </table>
+        <Weather/>
     ) : (
         <div>Getting the location data&hellip; </div>
     );

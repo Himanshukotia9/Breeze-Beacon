@@ -1,3 +1,4 @@
+// Api.jsx
 // Need to use the React-specific entry point to import createApi
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { apiKey } from './apiKeys'
@@ -12,9 +13,13 @@ export const weatherApi = createApi({
         query: (cityItems) => 
             `weather?q=${cityItems !== "[object Object]" ? cityItems : ''}&units=metric&APPID=${apiKey}`,
     }),
+    getWeatherByCoordinates: builder.query({
+      query: ({ lat, lon }) => 
+          `weather?lat=${lat}&lon=${lon}&units=metric&APPID=${apiKey}`,
+  }),
   }),
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetWeatherByNameQuery } = weatherApi
+export const { useGetWeatherByNameQuery, useGetWeatherByCoordinatesQuery } = weatherApi
