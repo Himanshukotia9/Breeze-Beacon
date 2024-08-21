@@ -5,11 +5,14 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
     items: [],
   };
+const initialCityState = {
+    items: "Delhi", // Default value for cityItems
+};
   
 // City slice
 export const citySlice = createSlice({
     name: 'city',
-    initialState: initialState,
+    initialState: initialCityState,
     reducers: {
       setCityItems: (state, action) => {
         state.items = action.payload;
@@ -34,7 +37,21 @@ export const weatherSlice = createSlice({
 // Action creators for Weather slice
 export const { setWeather } = weatherSlice.actions;
 
-// Weather slice
+// Search Weather slice
+export const searchWeatherSlice = createSlice({
+  name: 'searchWeather',
+  initialState: initialState,
+  reducers: {
+      setSearchWeather: (state, action) => {
+      state.items = action.payload;
+      },
+  },
+});
+
+// Action creators for Search Weather slice
+export const { setSearchWeather } = searchWeatherSlice.actions;
+
+// Location slice
 export const locationSlice = createSlice({
     name: 'location',
     initialState: initialState,
@@ -51,5 +68,6 @@ export const { setLocation } = locationSlice.actions;
 export const rootReducer = {
     city: citySlice.reducer,
     weather: weatherSlice.reducer,
+    searchWeather: searchWeatherSlice.reducer,
     location: locationSlice.reducer,
   };

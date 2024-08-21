@@ -8,6 +8,7 @@ export default {
     extend: {
       backgroundImage: {
         'weather': "url('/Images/weather.jpg')",
+        'background': "url('/Images/background.jpg')",
       },
     },
   },

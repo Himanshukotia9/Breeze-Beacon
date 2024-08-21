@@ -4,6 +4,7 @@ import { useGeolocated } from "react-geolocated";
 import { useDispatch } from 'react-redux';
 import { setLocation } from "../app/counter/slice";
 import Weather from "./Weather";
+import Loader from "./Loader";
 
 const Geolocation = () => {
     const dispatch = useDispatch();
@@ -12,7 +13,7 @@ const Geolocation = () => {
             positionOptions: {
                 enableHighAccuracy: false,
             },
-            userDecisionTimeout: 5000,
+            userDecisionTimeout: 10000,
         });
 
 
@@ -25,15 +26,14 @@ const Geolocation = () => {
                 }));
             }
         }, [coords, dispatch]);
-        console.log(coords);
     return !isGeolocationAvailable ? (
-        <div>Your browser does not support Geolocation</div>
+        <Loader title="Your browser does not support Geolocation"/>
     ) : !isGeolocationEnabled ? (
-        <div>Geolocation is not enabled</div>
+        <Loader title="Geolocation is not enabled"/>
     ) : coords ? (
         <Weather/>
     ) : (
-        <div>Getting the location data&hellip; </div>
+        <Loader title="Detecting your location &hellip; "/>
     );
 };
 
