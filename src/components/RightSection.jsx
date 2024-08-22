@@ -40,14 +40,12 @@ export default function RightSection() {
     const handleKeyDown = (e) => {
         if (e.key === "Enter") {
           dispatch(setCityItems(e.target.value)); // Trigger the data fetch
-          setCityItems("")
+          setCityItems("");
+          e.target.value = '';
         }
     };
 
-    const defaults = {
-        size: 64,
-        animate: true,
-      };
+    const defaults = {size: 85, animate: true,};
   
     
     const weatherIcon = getWeatherIcon(searchWeather.main, searchWeather.description, searchWeather.isDaytime); 
@@ -57,7 +55,7 @@ export default function RightSection() {
         <div className="flex-1 text-white bg-black bg-opacity-80 p-4">
             <div className="flex flex-col px-4">
                 <div className='flex flex-col items-center'>
-                    <div id='weatherIcon' className="text-5xl mb-4">
+                    <div id='weatherIcon' className="text-5xl my-4">
                         <ReactSkycon
                             icon={weatherIcon}
                             color={iconColor}
@@ -65,7 +63,7 @@ export default function RightSection() {
                             animate={defaults.animate}
                         />
                     </div>
-                    <h3 className="text-3xl font-bold mb-4">{searchWeather.main}</h3>
+                    <h3 className="text-3xl font-bold mb-4">{searchWeather.description}</h3>
                 </div>
                 <div className=" flex justify-center mb-4 w-full items-center">
                     <input className="px-4 py-3 w-3/4 border bg-transparent border-slate-600 rounded-3xl" placeholder="Enter City Name" type="text" onKeyDown={handleKeyDown}/>
@@ -75,7 +73,7 @@ export default function RightSection() {
                         <li className='flex justify-center py-2 items-center'><p>{searchWeather.city}, {searchWeather.country}</p></li>
                         <li className='flex justify-between p-2 items-center border-t border-slate-300'>
                             <p>Temperature:</p>
-                            <p>{searchWeather.temp}°C</p>
+                            <p>{searchWeather.temp}°C ({searchWeather.main})</p>
                         </li>
                         <li className='flex justify-between p-2 items-center border-t border-slate-300'>
                             <p>Humidity:</p>
