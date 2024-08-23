@@ -1,7 +1,6 @@
 // Api.jsx
 // Need to use the React-specific entry point to import createApi
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { apiKey } from './apiKeys'
 
 
 // Define a service using a base URL and expected endpoints
@@ -11,11 +10,11 @@ export const weatherApi = createApi({
   endpoints: (builder) => ({
     getWeatherByName: builder.query({
         query: (cityItems) => 
-            `weather?q=${cityItems !== "[object Object]" ? cityItems : ''}&units=metric&APPID=${apiKey}`,
+            `weather?q=${cityItems !== "[object Object]" ? cityItems : ''}&units=metric&APPID=${import.meta.env.VITE_WEATHER_API}`,
     }),
     getWeatherByCoordinates: builder.query({
       query: ({ lat, lon }) => 
-          `weather?lat=${lat}&lon=${lon}&units=metric&APPID=${apiKey}`,
+          `weather?lat=${lat}&lon=${lon}&units=metric&APPID=${import.meta.env.VITE_WEATHER_API}`,
   }),
   }),
 })
