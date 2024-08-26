@@ -10,10 +10,13 @@ export default function RightSection() {
     const dispatch = useDispatch();
     const cityItems = useSelector((state) => state.city.items);
     const searchWeather = useSelector((state) => state.searchWeather.items);
+    const [fullTime, setFullTime] = useState({
+        hour: '00',
+        minutes: '00',
+        seconds: '00'
+    })
 
-    const { data } = useGetWeatherByNameQuery(cityItems, {
-       // Skip fetching if fetchWeather is false
-    });
+    const { data } = useGetWeatherByNameQuery(cityItems);
   
       useEffect(() => {
         if (data) {
@@ -21,6 +24,17 @@ export default function RightSection() {
           const localTime = new Date().getTime() + data.timezone * 1000;
           const localHour = new Date(localTime).getUTCHours();
           const isDaytime = localHour >= 6 && localHour < 20;
+          const isPm = localHour >= 12 && localHour < 24;
+           
+          const currentTime = new Date(new Date().getTime() + data.timezone * 1000).toUTCString();
+          const newHour = new Date(currentTime).getUTCHours().toString().padStart(2, '0');
+          const newMinutes = new Date(currentTime).getUTCMinutes().toString().padStart(2, '0');
+          const newSeconds = new Date(currentTime).getUTCSeconds();
+          setFullTime({
+              hour: newHour,
+              minutes: newMinutes,
+              seconds: newSeconds,
+          });
 
           dispatch(setSearchWeather({
             city: data.name,
@@ -32,7 +46,24 @@ export default function RightSection() {
             visibility: Math.round((data.visibility) / 1000),
             windSpeed: Math.round(data.wind.speed),
             isDaytime,
+            isPm,
           }));
+
+        //   // Set up the interval to update the time every second
+        //   const interval = setInterval(() => {
+        //     const currentTime = new Date(new Date().getTime() + data.timezone * 1000).toUTCString();
+        //     const newHour = new Date(currentTime).getUTCHours().toString().padStart(2, '0');
+        //     const newMinutes = new Date(currentTime).getUTCMinutes().toString().padStart(2, '0');
+        //     const newSeconds = new Date(currentTime).getUTCSeconds();
+        //     setFullTime({
+        //         hour: newHour,
+        //         minutes: newMinutes,
+        //         seconds: newSeconds,
+        //     });
+        // }, 1000);
+
+        // // Cleanup the interval on component unmount
+        // return () => clearInterval(interval);
         }
       }, [data, dispatch]);
 
@@ -71,6 +102,10 @@ export default function RightSection() {
                 <div className="text-lg font-semibold">
                     <ul className=''>
                         <li className='flex justify-center py-2 items-center'><p>{searchWeather.city}, {searchWeather.country}</p></li>
+                        <li className='flex justify-between p-2 items-center border-t border-slate-300'>
+                            <p>Time:</p>
+                            <p>{fullTime.hour} : {fullTime.minutes} {searchWeather.isPm ? 'PM' : 'AM'}</p>
+                        </li>
                         <li className='flex justify-between p-2 items-center border-t border-slate-300'>
                             <p>Temperature:</p>
                             <p>{searchWeather.temp}°C ({searchWeather.main})</p>
